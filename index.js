@@ -1,6 +1,7 @@
 const express = require('express');
 
 const app = express();
+app.use(express.json())
 
 const port = 8080;
 app.get("/" , (request , response)=>{
@@ -27,6 +28,29 @@ app.get('/users/:id', (req, res) => {
     return res.status(404).json({ error: 'User not found' });
   }
   res.status(200).json(user);
+});
+
+app.post('/new-users', (req, res) => {
+  const { name, email } = req.body;
+
+  // Validate input
+  if (!name || !email) {
+    return res.status(400).json({
+      error: 'Name and email are required',
+    });
+  }
+
+  // Create new user object
+  const newUser = {
+    id: users.length + 1,
+    name: name,
+    email: email,
+  };
+
+  users.push(newUser);
+
+  // 201 Created = resource successfully created
+  res.status(201).json(newUser);
 });
 
 
